@@ -1,10 +1,10 @@
 """
 This is a command line application that allows you to scrape twitter!
 """
-import csv
 import json
 import logging
 import argparse
+import unicodecsv
 import collections
 import datetime as dt
 from os.path import isfile
@@ -18,6 +18,7 @@ class JSONEncoder(json.JSONEncoder):
             return list(obj)
         elif isinstance(obj, dt.datetime):
             return obj.isoformat()
+
         elif hasattr(obj, '__getitem__') and hasattr(obj, 'keys'):
             return dict(obj)
         elif hasattr(obj, '__dict__'):
@@ -98,7 +99,7 @@ def main():
             if tweets:
                 with open(args.output, "w") as output:
                     if args.csv:
-                        f = csv.writer(output)
+                        f = unicodecsv.writer(output)
                         f.writerow(["user", "fullname", "tweet-id", "timestamp", "url", "likes", "replies", "retweets", "text", "html"])
                         for x in tweets:
                             f.writerow([x.user, x.fullname, x.id, x.timestamp, x.url, 
